@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^spotify$ payments_info.php?type=spotify [L]
+RewriteRule ^youtube$ payments_info.php?type=youtube [L]
