@@ -59,9 +59,9 @@
         </div>
 
         <script>
-            if(btoa(prompt("Vložte heslo")) != "M3hzd2Fn"){
+            /*if(btoa(prompt("Vložte heslo")) != "M3hzd2Fn"){
                 window.location.href = "http://vosikar.cz";
-            }
+            }*/
 
             $(function(){
                 $("#payments-table tbody").on("click", ".pay-button", function(e){
