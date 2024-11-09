@@ -2,7 +2,7 @@
     if(!isset($_GET["type"])) die;
     $type = $_GET["type"];
     if(!in_array($type, ["spotify", "youtube"])) die;
-    $admin = in_array($_SERVER["REMOTE_ADDR"], ["::1"]);
+    require "include/admin.php";
 
     $columns = [
         "username" => "Uživatel",
@@ -59,16 +59,16 @@
         </div>
 
         <script>
-            /*if(btoa(prompt("Vložte heslo")) != "M3hzd2Fn"){
-                window.location.href = "http://vosikar.cz";
-            }*/
+            var table;
+
+            <?php if(!$admin): ?>
+                if(btoa(prompt("Vložte heslo")) != "M3hzd2Fn"){
+                    window.location.href = "http://vosikar.cz";
+                }
+            <?php endif; ?>
 
             $(function(){
-                $("#payments-table tbody").on("click", ".pay-button", function(e){
-                    console.log($(this));
-                    //TODO: zprovoznit
-                });
-                $("#payments-table").dataTable({
+                table = $("#payments-table").dataTable({
                     ajax: {
                         url: "payments.php?type=<?= $type ?>"
                     },
@@ -86,6 +86,27 @@
                         },
                     ],
                     order: [[3, "asc"], [2, "desc"]],
+                });
+            });
+
+            $("#payments-table tbody").on("click", ".pay-button", function(e){
+                const $this = $(this);
+                const service = $this.data("service");
+                const userId = $this.data("user-id");
+                const paymentFor = $this.data("payment-for");
+
+                $.post({
+                    url: "add_payment.php",
+                    data: {
+                        service: service,
+                        userId: userId,
+                        paymentFor: paymentFor,
+                    },
+                    success: function(data){
+                        if(data == 1){
+                            table.api().ajax.reload();
+                        }
+                    }
                 });
             });
         </script>

@@ -9,14 +9,13 @@ if(!in_array($type, ["spotify", "youtube"])) die;
 if($type === "spotify"){
     $type = 1;
     $startMonth = 8;
-}else{ //$type = "youtube"
+}else{ //$type === "youtube"
     $type = 2;
     $startMonth = 12;
 }
 
-$database = parse_ini_file(".env");
-$admin = in_array($_SERVER["REMOTE_ADDR"], ["::1"]);
-$connection = new mysqli($database["DB_HOST"], $database["DB_USERNAME"], $database["DB_PASSWORD"], $database["DB_DATABASE"]);
+require "include/admin.php";
+require "include/database.php";
 
 //Load types
 $typesResult = $connection->query("SELECT * FROM subscription_types");
